@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ミスタードーナツ1000円ガチャ</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+  </head>
+  <body class="bg-koda text-center">
+    <div
+      class="container p-4 mx-auto"
+      x-data="{
+                result: [],
+                requestAPI() {
+                    axios.get('http://127.0.0.1:3000').then((res) => {
+                    let data = res.data;
+
+                // 最小金額 ¥100
+                const min = Math.min(...res.data.map((item) => item.price));
+
+                // 設定金額 ¥1,000
+                const limit = 1000;
+
+                // 現在の合計金額 ???
+                let total = 0;
+
+                while (total < limit && min <= limit - total) {
+                    // ランダムでドーナッツを抽選
+                    const item = data[Math.floor(Math.random() * data.length)];
+
+                    // ドーナッツの金額が limit を超えない場合
+                    // totalに足す
+                    if (total + item.price <= limit) {
+                        total += item.price;
+                        this.result.push(item);
+                    }
+                }
+            });
+                },
+
+            }"
+      x-init="requestAPI()"
+    >
+      <div class="flex">
+        <img src="../images/donuts.png" alt="ドーナツ" class="reletive" />
+        <img
+          src="../images/donuts.png"
+          alt="ドーナツ"
+          class="reletive ml-auto"
+        />
+      </div>
+      <h1 class="text-amamiyagord text-5xl my-12">
+        ミスタードーナツ1000円ガチャ
+      </h1>
+      <div class="flex items-center">
+        <img src="../images/donuts.png" alt="ドーナツ" class="reletive" />
+        <img
+          src="../images/donuts.png"
+          alt="ドーナツ"
+          class="reletive ml-auto"
+        />
+      </div>
+      <template x-for="item in result">
+        <ul class="inline-block">
+          <li class="m-3 border rounded text-white p-4 bg-kamui">
+            <img
+              :src="item.image"
+              alt="ドーナッツ"
+              class="w-40 rounded m-1 mx-auto"
+            />
+            <p class="ml-4"><span x-text="item.name"></span></p>
+            <p class="ml-4"><span x-text="item.price"></span>円</p>
+          </li>
+        </ul>
+      </template>
+      <div class="my-12">
+        <button
+          class="p-4 text-white border rounded w-52 text-xl bg-deku"
+          @click="requestAPI()"
+          onclick="window.location.reload();"
+        >
+          再抽選
+        </button>
+      </div>
+      <!-- /.mt-12 -->
+    </div>
+  </body>
+</html>

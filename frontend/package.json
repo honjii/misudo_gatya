@@ -1,0 +1,13 @@
+{
+  "name": "profile",
+  "source": "src/index.html",
+  "browserslist": "> 1%, last 2 versions, not dead",
+  "scripts": {
+    "start": "parcel --open",
+    "build": "rm -r ./dist/; parcel build"
+  },
+  "devDependencies": {
+    "parcel": "latest",
+    "tailwindcss": "latest"
+  }
+}
